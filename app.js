@@ -11,10 +11,11 @@ var configDB = require('./app/config/database.js');
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
 var session = require('express-session');
+var ejsLayout = require('express-ejs-layouts');
 
 var app = express();
 
-mongoose.connect(configDB.url); 
+mongoose.connect(configDB.url);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,6 +29,7 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(ejsLayout);
 app.set('view engine', 'ejs'); // set up ejs for templating
 app.set('views','./app/views');
 // routes ======================================================================
@@ -45,10 +47,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
-// app.listen(3000, function () {
-//   console.log('Example app listening on port 3000!');
-// });
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
