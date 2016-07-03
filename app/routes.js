@@ -1,36 +1,25 @@
 // app/routes.js
+
+var siteCtrl = require('./controllers/site.js'); //Site controller 
+var authCtrl = require('./controllers/auth.js'); //Auth controller 
+
 module.exports = function(app, passport) {
 
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
-    app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
-        
-    });
-
-    // =====================================
-    // LOGIN ===============================
-    // =====================================
-    // show the login form
-    app.get('/login', function(req, res) {
     
-        // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { message: req.flash('loginMessage') }); 
-    });
+    //Attach Site Controller to Route     
+    app.get('/', siteCtrl.index);
+
+    app.get('/login', authCtrl.login);
 
     // process the login form
     // app.post('/login', do all our passport stuff here);
 
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
-    app.get('/signup', function(req, res) {
+   
 
-        // render the page and pass in any flash data if it exists
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
-    });
+    app.get('/signup', authCtrl.signup);
 
     // process the signup form
     // app.post('/signup', do all our passport stuff here);
@@ -46,13 +35,9 @@ module.exports = function(app, passport) {
         });
     });
 
-    // =====================================
-    // LOGOUT ==============================
-    // =====================================
-    app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
+   
+
+     app.get('/logout', authCtrl.logout);
 };
 
 // route middleware to make sure a user is logged in
