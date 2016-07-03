@@ -8,14 +8,23 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
 var configDB = require('./app/config/database.js');
-//var routes = require('./routes/index');
-//var users = require('./routes/users');
+var  configPassport = require('./app/config/passport')
+
 var session = require('express-session');
 var ejsLayout = require('express-ejs-layouts');
 
 var app = express();
 
 mongoose.connect(configDB.url);
+mongoose.connection.on('connected', function () {
+  console.log('Mongoose connected to ' + configDB.url);
+});
+mongoose.connection.on('error',function (err) {
+  console.log('Mongoose connection error: ' + err);
+});
+mongoose.connection.on('disconnected', function () {
+  console.log('Mongoose disconnected');
+});
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -35,7 +44,8 @@ app.set('views','./app/views');
 // routes ======================================================================
 var routes = require('./app/routes.js'); // load our routes and pass in our app and fully configured passport
 
-routes(app, passport);
+configPassport(passport);// pass passport object to passport configuration file
+routes(app, passport); // pass app and passport object to routes
 
  //app.use('/api', routes);
  //app.use('/api/users', users);
